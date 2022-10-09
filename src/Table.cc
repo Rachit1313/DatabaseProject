@@ -73,6 +73,46 @@ std::ostream& Table::display(std::ostream& ostr)
     ostr << std::endl;
     return ostr;
 }
+
+std::ostream& Table::printTable(std::ostream& ostr)
+{
+    ostr << std::endl;
+    ostr.width(this->m_size * 27 + 1);
+    ostr.fill('-');
+    ostr << "" << std::endl;
+    ostr.fill(' ');
+
+    int i = 0;
+    ostr.setf(std::ios::left);
+    for (int i = 0; i < this->m_size; ++i) {
+        ostr << "| ";
+        ostr.width(25);
+        ostr << this->row[i].getColumnName();
+    }
+    ostr.unsetf(std::ios::left);
+    ostr << "|" << std::endl;
+    
+    ostr.width(this->m_size * 27 + 1);
+    ostr.fill('-');
+    ostr << "" << std::endl;
+    ostr.fill(' ');
+    
+    while (i < this->row[0].getSize()) {
+        for (int j = 0; j < this->m_size; ++j) {
+            ostr << "| ";
+            this->row[j].displayOneColumnData(ostr, i, 25);
+        }
+        std::cout << "|" << std::endl;
+        ++i;
+    }
+    
+    ostr.width(this->m_size * 27 + 1);
+    ostr.fill('-');
+    ostr << "" << std::endl;
+    ostr.fill(' ');
+
+}
+
 Table::~Table()
 {
     delete[] this->m_tableName;

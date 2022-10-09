@@ -1,5 +1,6 @@
 #ifndef _COLUMN_H
 #define _COLUMN_H
+#include <iostream>
 #include <cstring>
 
 union Data {
@@ -26,7 +27,10 @@ struct Column {
         void addData(std::string newdata);
         void addData(char data);
         char* getType();
+        int getSize();
+        const char *getColumnName() const;
         std::ostream& display(std::ostream& ostr);
+        std::ostream& displayOneColumnData(std::ostream& ostr, int index, int width = 1);
         void freeMemory();
 };
 

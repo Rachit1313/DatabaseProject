@@ -121,6 +121,16 @@ char* Column::getType()
 {
     return this->m_type;
 }
+int Column::getSize()
+{
+    return this->m_size;
+}
+const char *Column::getColumnName() const
+{
+    return (const char *) this->m_columnName;
+}
+
+
 std::ostream& Column::display(std::ostream& ostr)
 {
     std::cout.setf(std::ios::left);
@@ -145,6 +155,21 @@ std::ostream& Column::display(std::ostream& ostr)
 
     return ostr;
 }
+std::ostream& Column::displayOneColumnData(std::ostream& ostr, int index, int width)
+{
+    ostr.width(width);
+    ostr.setf(std::ios::left);
+    if (strcmp(this->m_type, "int") == 0)
+            ostr << this->m_data[index].m_intData;
+        else if (strcmp(this->m_type, "double") == 0)
+            ostr << this->m_data[index].m_doubleData;
+        else if (strcmp(this->m_type, "string") == 0)
+            ostr << this->m_data[index].m_stringData;
+        else if (strcmp(this->m_type, "char") == 0)
+            ostr << this->m_data[index].m_charData;
+    ostr.unsetf(std::ios::left);
+}
+
 void Column::freeMemory()
 {
     if (this->m_columnName != nullptr)
