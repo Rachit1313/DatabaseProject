@@ -49,6 +49,9 @@ void Table::addColumnData(int numberOfArguments, ...)
         else if (strcmp(this->row[i].getType(), "string") == 0) {
            this->row[i].addData(va_arg(valist, const char *));
         }
+        else if (strcmp(this->row[i].getType(), "char") == 0) {
+            this->row[i].addData((char) va_arg(valist, int));
+        }
     }
     va_end(valist);
 }

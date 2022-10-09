@@ -40,6 +40,9 @@ void Column::addData(int data){
             tmp[i].m_doubleData = this->m_data[i].m_doubleData;
         else if (strcmp(this->m_type, "string") == 0)
             tmp[i].m_stringData = this->m_data[i].m_stringData;
+        else if (strcmp(this->m_type, "char") == 0) {
+            tmp[i].m_charData = this->m_data[i].m_charData;
+        }
     }
     tmp[this->m_size].m_intData = data;
     this->m_size += 1;
@@ -59,6 +62,8 @@ void Column::addData(double Data){
             tmp[i].m_doubleData = this->m_data[i].m_doubleData;
         else if (strcmp(this->m_type, "string") == 0)
             tmp[i].m_stringData = this->m_data[i].m_stringData;
+        else if (strcmp(this->m_type, "char") == 0)
+            tmp[i].m_charData = this->m_data[i].m_charData;
     }
     tmp[this->m_size].m_doubleData = Data;
     this->m_size +=1;
@@ -78,8 +83,34 @@ void Column::addData(std::string newdata)
         else if (strcmp(this->m_type, "string") == 0) {
             tmp[i].m_stringData = this->m_data[i].m_stringData;
         }
+        else if (strcmp(this->m_type, "char") == 0) {
+            tmp[i].m_charData = this->m_data[i].m_charData;
+        }
     }
     tmp[this->m_size].m_stringData = newdata;
+    this->m_size += 1;
+    
+    if (this->m_data != nullptr)
+        delete[] this->m_data;
+    this->m_data = tmp;
+}
+void Column::addData(char data)
+{
+    union Data *tmp = new union Data[this->m_size + 1];
+    
+    for (int i = 0; i < m_size; ++i) {
+        if (strcmp(this->m_type, "int") == 0)
+            tmp[i].m_intData = this->m_data[i].m_intData;
+        else if (strcmp(this->m_type, "double") == 0)
+            tmp[i].m_doubleData = this->m_data[i].m_doubleData;
+        else if (strcmp(this->m_type, "string") == 0) {
+            tmp[i].m_stringData = this->m_data[i].m_stringData;
+        }
+        else if (strcmp(this->m_type, "char") == 0) {
+            tmp[i].m_charData = this->m_data[i].m_charData;
+        }
+    }
+    tmp[this->m_size].m_charData = data;
     this->m_size += 1;
     
     if (this->m_data != nullptr)
@@ -106,6 +137,8 @@ std::ostream& Column::display(std::ostream& ostr)
             std::cout << this->m_data[i].m_doubleData;
         else if (strcmp(this->m_type, "string") == 0)
             std::cout << this->m_data[i].m_stringData;
+        else if (strcmp(this->m_type, "char") == 0)
+            std::cout << this->m_data[i].m_charData;
     }
     std::cout << std::endl;
     std::cout.unsetf(std::ios::left);
