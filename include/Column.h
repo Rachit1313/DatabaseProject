@@ -6,6 +6,7 @@ union Data {
     int m_intData;
     std::string m_stringData= "";
     double m_doubleData;
+    char m_charData;
     Data();
     ~Data();
 };
@@ -23,6 +24,7 @@ struct Column {
         void addData(int data);
         void addData(double Data);
         void addData(std::string newdata);
+        void addData(char data);
         char* getType();
         std::ostream& display(std::ostream& ostr);
         void freeMemory();
