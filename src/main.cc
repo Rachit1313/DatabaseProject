@@ -15,5 +15,5 @@ int main(void)
     t.addColumnData(t.getTotalColumns(), 6, "Rachit Chawla", 34.728, 'A');
     t.addColumnData(t.getTotalColumns(), 184, "Test Name", 104.01, 'B');
     
-    t.display();
+    t.printTable();
 }
