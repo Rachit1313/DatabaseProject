@@ -167,6 +167,34 @@ void Column::popData()
     this->m_data = tmp;
 }
 
+void Column::deleteData(int index)
+{
+    union Data *tmp = new union Data[this->m_size - 1];
+
+    int i = 0; // Loop for this->m_data
+    int j = 0; // Loop for tmp
+    for (int i = 0; i < m_size; ++i) {
+        if (i == index)
+            continue; // Skip
+        if (strcmp(this->m_type, "int") == 0)
+            tmp[j++].m_intData = this->m_data[i].m_intData;
+        else if (strcmp(this->m_type, "double") == 0)
+            tmp[j++].m_doubleData = this->m_data[i].m_doubleData;
+        else if (strcmp(this->m_type, "string") == 0) {
+            tmp[j++].m_stringData = this->m_data[i].m_stringData;
+        }
+        else if (strcmp(this->m_type, "char") == 0) {
+            tmp[j++].m_charData = this->m_data[i].m_charData;
+        }
+    }
+
+    this->m_size -= 1;
+    
+    if (this->m_data != nullptr)
+        delete[] this->m_data;
+    this->m_data = tmp;
+}
+
 char* Column::getType()
 {
     return this->m_type;
@@ -237,3 +265,13 @@ void Column::freeMemory()
     if (this->m_data != nullptr)
         delete[] this->m_data;
 }
+
+int Column::checkData(std::string data)
+{
+    for (int i = 0; i < this->m_size; ++i) {
+        if (this->m_data[i].m_stringData == data)
+            return i;
+    }
+    return -1;
+}  
+

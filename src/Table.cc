@@ -128,3 +128,17 @@ Table::~Table()
         this->row[i].freeMemory();
     delete[] this->row;
 }
+
+void Table::deleteRow(const char *columnName, std::string data)
+{
+    for (int i = 0; i < this->m_size; ++i) { // Locate the column with name 'columnName'
+        if (strcmp(this->row[i].getColumnName(), columnName) == 0) {
+            int index = this->row[i].checkData(data);
+            if (index >= 0) {
+                for (int i = 0; i < this->m_size; ++i) {
+                    this->row[i].deleteData(index);
+                }
+            }
+        } 
+    }
+}
