@@ -15,7 +15,7 @@ class Table {
         Table();
         Table(const char *tableName);
         int getTotalColumns(void);
-        void addColumn(const char *columnName, const char *columnDataType);
+        void addColumn(const char *columnName, const char *columnDataType = DEFAULT_COLUMN_DATA_TYPE, bool primaryKey = false);
         void addColumnData(int numberOfArguments, ...);
         std::ostream& display(std::ostream& ostr = std::cout);
         std::ostream& printTable(std::ostream& ostr = std::cout);

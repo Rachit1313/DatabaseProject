@@ -1,6 +1,7 @@
 #include <iostream>
 #include "../include/Table.h"
 
+
 Table::Table(){
     this->m_tableName = nullptr;
     this->row = nullptr;
@@ -22,9 +23,9 @@ int Table::getTotalColumns(void)
     return this->m_size;
 }
 
-void Table::addColumn(const char *columnName, const char *columnDataType)
+void Table::addColumn(const char *columnName, const char *columnDataType, bool primaryKey)
 {
-    struct Column tmpColumn(columnName, columnDataType);
+    struct Column tmpColumn(columnName, columnDataType, primaryKey);
     
     struct Column *tmp = new struct Column[m_size + 1];
     for (int i = 0; i < m_size; ++i)
@@ -39,18 +40,25 @@ void Table::addColumnData(int numberOfArguments, ...)
 {
     va_list valist;
     va_start(valist, numberOfArguments);
+    bool dataAddingSuccessfully = true;
     for(int i=0;i<numberOfArguments;i++){
         if (strcmp(this->row[i].getType(), "int") == 0) {
-            this->row[i].addData(va_arg(valist, int));
+            dataAddingSuccessfully = this->row[i].addData(va_arg(valist, int));
         }
         else if (strcmp(this->row[i].getType(), "double") == 0) {
-            this->row[i].addData(va_arg(valist, double));
+            dataAddingSuccessfully = this->row[i].addData(va_arg(valist, double));
         }
         else if (strcmp(this->row[i].getType(), "string") == 0) {
-           this->row[i].addData(va_arg(valist, const char *));
+           dataAddingSuccessfully = this->row[i].addData(va_arg(valist, const char *));
         }
         else if (strcmp(this->row[i].getType(), "char") == 0) {
-            this->row[i].addData((char) va_arg(valist, int));
+            dataAddingSuccessfully = this->row[i].addData((char) va_arg(valist, int));
+        }
+        if (!dataAddingSuccessfully) {
+            for (int j = 0; j < i; ++j)
+                this->row[j].popData();
+            std::cerr << "WARNING: CANNOT ADD DUPLICATE DATA TO PRIMARY KEY" << std::endl;
+            break;
         }
     }
     va_end(valist);

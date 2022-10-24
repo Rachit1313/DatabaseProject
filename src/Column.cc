@@ -10,28 +10,30 @@ Column::Column(){
     this->m_data = nullptr;
     this->m_size = 0;
 }
-Column::Column(const char* name)
+
+Column::Column(const char* name, const char *type, bool primaryKey)
 {
     if(name != nullptr){
         this->m_columnName = new char[strlen(name)+1];
         strcpy(this->m_columnName, name);
     }
-}
-Column::Column(const char* name, const char *type)
-{
-    if(name != nullptr){
-        this->m_columnName = new char[strlen(name)+1];
-        strcpy(this->m_columnName, name);
-    }
-   if(type != nullptr){
+    if(type != nullptr){
         this->m_type = new char[strlen(type)+1];
         strcpy(this->m_type, type);
     }
+    if (primaryKey) {
+        this->primaryKey = true;
+    }
 }
-void Column::addData(int data){
+bool Column::addData(int data){
     union Data tmpData;
     tmpData.m_intData = data;
     union Data *tmp = new union Data[this->m_size + 1];
+
+    for (int i = 0; this->getPrimaryKey() && i < this->m_size; ++i) {
+        if (this->m_data[i].m_intData == data)
+            return false;
+    }
     
     for(int i = 0; i < m_size; ++i) {
         if (strcmp(this->m_type, "int") == 0)
@@ -49,10 +51,17 @@ void Column::addData(int data){
     
     delete[] this->m_data;
     this->m_data = tmp;
+
+    return true; // Data added successfully
 }
-void Column::addData(double Data){
+bool Column::addData(double Data){
     union Data tmpData;
     tmpData.m_doubleData = Data;
+
+    for (int i = 0; this->getPrimaryKey() && i < this->m_size; ++i) {
+        if (this->m_data[i].m_doubleData == Data)
+            return false;
+    }
     
     union Data *tmp = new union Data[this->m_size +1];
     for (int i = 0; i < m_size; ++i) {
@@ -70,10 +79,17 @@ void Column::addData(double Data){
     
     delete[] this->m_data;
     this->m_data = tmp;
+
+    return true; // Data added successfully
 }
-void Column::addData(std::string newdata)
+bool Column::addData(std::string newdata)
 {
     union Data *tmp = new union Data[this->m_size + 1];
+    
+    for (int i = 0; this->getPrimaryKey() && i < this->m_size; ++i) {
+        if (this->m_data[i].m_stringData == newdata)
+            return false;
+    }
     
     for (int i = 0; i < m_size; ++i) {
         if (strcmp(this->m_type, "int") == 0)
@@ -93,10 +109,17 @@ void Column::addData(std::string newdata)
     if (this->m_data != nullptr)
         delete[] this->m_data;
     this->m_data = tmp;
+
+    return true; // Data added successfully
 }
-void Column::addData(char data)
+bool Column::addData(char data)
 {
     union Data *tmp = new union Data[this->m_size + 1];
+    
+    for (int i = 0; this->getPrimaryKey() && i < this->m_size; ++i) {
+        if (this->m_data[i].m_charData == data)
+            return false;
+    }
     
     for (int i = 0; i < m_size; ++i) {
         if (strcmp(this->m_type, "int") == 0)
@@ -116,7 +139,34 @@ void Column::addData(char data)
     if (this->m_data != nullptr)
         delete[] this->m_data;
     this->m_data = tmp;
+
+    return true; // Data added successfully
 }
+
+void Column::popData()
+{
+    this->m_size -= 1;
+
+    union Data *tmp = new union Data[this->m_size];
+    
+    for (int i = 0; i < m_size; ++i) {
+        if (strcmp(this->m_type, "int") == 0)
+            tmp[i].m_intData = this->m_data[i].m_intData;
+        else if (strcmp(this->m_type, "double") == 0)
+            tmp[i].m_doubleData = this->m_data[i].m_doubleData;
+        else if (strcmp(this->m_type, "string") == 0) {
+            tmp[i].m_stringData = this->m_data[i].m_stringData;
+        }
+        else if (strcmp(this->m_type, "char") == 0) {
+            tmp[i].m_charData = this->m_data[i].m_charData;
+        }
+    }
+    
+    if (this->m_data != nullptr)
+        delete[] this->m_data;
+    this->m_data = tmp;
+}
+
 char* Column::getType()
 {
     return this->m_type;
@@ -125,6 +175,13 @@ int Column::getSize()
 {
     return this->m_size;
 }
+
+bool Column::getPrimaryKey()
+{
+    return this->primaryKey;
+}
+
+
 const char *Column::getColumnName() const
 {
     return (const char *) this->m_columnName;
@@ -168,6 +225,7 @@ std::ostream& Column::displayOneColumnData(std::ostream& ostr, int index, int wi
         else if (strcmp(this->m_type, "char") == 0)
             ostr << this->m_data[index].m_charData;
     ostr.unsetf(std::ios::left);
+    return ostr;
 }
 
 void Column::freeMemory()
