@@ -29,6 +29,8 @@ struct Column {
         bool addData(std::string newdata);
         bool addData(char data);
         void popData(void);
+        void deleteData(int index);
+        void getData(void);
         char* getType();
         int getSize();
         bool getPrimaryKey();
@@ -36,6 +38,31 @@ struct Column {
         std::ostream& display(std::ostream& ostr);
         std::ostream& displayOneColumnData(std::ostream& ostr, int index, int width = 1);
         void freeMemory();
+        template <typename T>
+        int checkData(T data);
+        int checkData(std::string data);
 };
+
+template <typename T>
+int Column::checkData(T data)
+{
+    for (int i = 0; i < this->m_size; ++i) {
+    if (strcmp(this->m_type, "int") == 0) {
+        if (this->m_data[i].m_intData == data)
+            return i;
+    }
+    else if (strcmp(this->m_type, "double") == 0) {
+        if (this->m_data[i].m_doubleData == data)
+            return i;
+    }
+    else if (strcmp(this->m_type, "char") == 0) {
+        if (this->m_data[i].m_charData == data)
+            return i;
+    }
+    }
+    return -1;
+}
+
+
 
 #endif
