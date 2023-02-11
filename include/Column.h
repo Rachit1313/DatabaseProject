@@ -29,6 +29,9 @@ struct Column {
         bool addData(std::string newdata);
         bool addData(char data);
         void popData(void);
+        template <typename T>
+        int updateData(int index, T data);
+        int updateData(int index, std::string data);
         void deleteData(int index);
         void getData(void);
         char* getType();
@@ -42,6 +45,24 @@ struct Column {
         int checkData(T data);
         int checkData(std::string data);
 };
+
+template <typename T>
+int Column::updateData(int index, T data)
+{
+    if (strcmp(this->m_type, "int") == 0) {
+        this->m_data[index].m_intData = data;
+        return 1; // Data is successfully updated
+    }
+    else if (strcmp(this->m_type, "double") == 0) {
+        this->m_data[index].m_doubleData = data;
+        return 1; // Data is successfully updated
+    }
+    else if (strcmp(this->m_type, "char") == 0) {
+        this->m_data[index].m_charData = data;
+        return 1; // Data is successfully updated
+    }
+    return 0; // Data not updated
+}
 
 template <typename T>
 int Column::checkData(T data)

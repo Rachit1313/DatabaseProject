@@ -17,8 +17,11 @@ int main(void)
     t.addColumnData(t.getTotalColumns(), 184, "Test Name 1", 104.01, 'B');
     t.addColumnData(t.getTotalColumns(), 7, "Abhishek", 101.45, 'W');
 
-    t.deleteRow("Number", 184);
-    t.deleteRow("Name", std::string("Abhishek"));
+    // t.deleteRow("Number", 184);
+    // t.deleteRow("Name", std::string("Abhishek"));
+    
+    t.updateRowData("Number", 2, "Grade", 'A');
+    t.updateRowData("Name", std::string("Test Name 1"), "Name", std::string("Test Name 2"));
     
     t.printTable();
 }

@@ -119,6 +119,7 @@ std::ostream& Table::printTable(std::ostream& ostr)
     ostr << "" << std::endl;
     ostr.fill(' ');
 
+    return ostr;
 }
 
 Table::~Table()
