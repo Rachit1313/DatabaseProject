@@ -167,6 +167,13 @@ void Column::popData()
     this->m_data = tmp;
 }
 
+int Column::updateData(int index, std::string data)
+{
+    this->m_data[index].m_stringData = data;
+    return 1;
+}
+
+
 void Column::deleteData(int index)
 {
     union Data *tmp = new union Data[this->m_size - 1];
