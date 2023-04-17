@@ -1,3 +1,8 @@
+/**
+ * @author [Rachit1313](https://github.com/Rachit1313)
+ * @author [Jaskarn7](https://github.com/Jaskarn7)
+*/
+
 #ifndef _COLUMN_H
 #define _COLUMN_H
 #include <iostream>
